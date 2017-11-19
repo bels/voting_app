@@ -1,6 +1,9 @@
 package VotingApp;
 use Mojo::Base 'Mojolicious';
 
+use Mojo::Pg;
+use VotingApp::Model::Core;
+
 # This method will run once at server start
 sub startup {
   my $self = shift;
@@ -10,12 +13,15 @@ sub startup {
   $self->helper(pg => sub { state $pg = Mojo::Pg->new( shift->config('pg'))});
   $self->helper(core => sub { 
 	my $app = shift;
-	state $core = RoadHack::Model::Core->new(pg => $app->pg, debug => $app->app->mode eq 'development' ? 1 :  0) ;
+	state $core = VotingApp::Model::Core->new(pg => $app->pg, debug => $app->app->mode eq 'development' ? 1 :  0) ;
   });
 
   # Documentation browser under "/perldoc"
   $self->plugin('PODRenderer') if $config->{perldoc};
   $self->sessions->default_expiration('3600');
+  
+  #Keeping the database in sync - Will mess with this someday
+  #$self->pg->migrations->from_file('./sql/migrations.sql')->migrate;
   # Router
   my $r = $self->routes;
 

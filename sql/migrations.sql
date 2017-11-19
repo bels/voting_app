@@ -1,11 +1,23 @@
 -- 1 up
+CREATE EXTENSION "pgcrypto";
+CREATE EXTENSION "uuid-ossp";
+
+CREATE OR REPLACE FUNCTION public.integrity_enforcement() RETURNS TRIGGER AS $$
+BEGIN
+	NEW.id = OLD.id;
+	NEW.genesis = OLD.genesis;
+	NEW.modified = current_timestamp;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE campaign(
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	genesis TIMESTAMPTZ DEFAULT now(),
 	modified TIMESTAMPTZ DEFAULT now(),
 	name TEXT NOT NULL,
 	election_date TIMESTAMPTZ NOT NULL,
-	nomination_deadline TIMESTAMPTX NOT NULL,
+	nomination_deadline TIMESTAMPTZ NOT NULL,
 	active BOOLEAN DEFAULT true
 );
 
@@ -58,7 +70,7 @@ CREATE TABLE offices(
 	modified TIMESTAMPTZ DEFAULT now(),
 	name TEXT NOT NULL,
 	campaign UUID NOT NULL REFERENCES campaign(id),
-	active BOOLEAN DEFAULTE true
+	active BOOLEAN DEFAULT true
 );
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON offices TO voting_user;
