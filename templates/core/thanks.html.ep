@@ -1,0 +1,4 @@
+%layout 'default';
+%title 'Velocity Voting App';
+
+<h2>Thanks for voting</h2>

@@ -38,10 +38,35 @@ sub get_offices{
 sub record_nominations{
 	my ($self,$data) = @_;
 	
-	$self->pg->db->query('insert into nominations (name, office, campiagn) values (?,?,?)',$data->{'name'},$self->{'office'})
+	#first check to see if they are eligible to vote
+	
+	my $eligible = $self->pg->db->query('select count(*) from authorized_voters where voter = ? and active = true',$data->{'voter'})->hash;
+	if($eligible->{'count'}){
+		$self->pg->db->query('insert into nominations (name, office, campiagn) values (?,?,?)',$data->{'name'},$self->{'office'});
+		return 1;
+	} else {
+		#couldn't vote
+		return 0;
+	}
+	
 }
 
 sub record_votes{
 	my ($self,$data) = @_;
+	
+	#first check to see if this person is eligible to vote
+	my $eligible = $self->pg->db->query('select count(*) from authorized_voters where voter = ? and active = true',$data->{'voter'})->hash;
+	if($eligible->{'count'}){
+		#second check to see if they have already voted
+		my $already_voted = $self->pg->db->query('select count(*) from voter_tracking where voter = ? and campaign = ?', $data->{'voter'}, $data->{'campaign'})->hash;
+		unless($already_voted->{'count'}){
+			$self->pg->db->query('insert into votes(candidate, campaign) values (?,?)',$data->{'candidate'},$data->{'campaign'}) ;
+			$self->pg->db->query('insert into voter_tracking(voter,campaign) values(?,?)',$data->{'voter'},$data->{'campaign'});
+		} else {
+			return {code => -2, message => 'Already voted'};
+		}
+	} else {
+		return {code => -1, message => 'Not eligible to vote'};
+	}
 }
 1;

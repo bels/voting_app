@@ -17,7 +17,7 @@ CREATE TABLE authorized_voters(
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	genesis TIMESTAMPTZ DEFAULT now(),
 	modified TIMESTAMPTZ DEFAULT now(),
-	voter TEXT NOT NULL,
+	voter TEXT NOT NULL UNIQUE,
 	active BOOLEAN DEFAULT true
 );
 
@@ -40,7 +40,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON candidate TO voting_user;
 CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON candidate
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
-CREATE TABLE vote(
+CREATE TABLE votes(
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	genesis TIMESTAMPTZ DEFAULT now(),
 	modified TIMESTAMPTZ DEFAULT now(),
@@ -48,8 +48,8 @@ CREATE TABLE vote(
 	campaign UUID NOT NULL REFERENCES campaign(id)
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON vote TO voting_user;
-CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON vote
+GRANT SELECT, INSERT, UPDATE, DELETE ON votes TO voting_user;
+CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON votes
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
 CREATE TABLE offices(
@@ -76,6 +76,18 @@ CREATE TABLE nominations(
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON nominations TO voting_user;
 CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON nominations
+	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
+
+CREATE TABLE voter_tracking(
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	genesis TIMESTAMPTZ DEFAULT now(),
+	modified TIMESTAMPTZ DEFAULT now(),
+	voter UUID NOT NULL REFERENCES authorized_voters(id),
+	campaign UUID NOT NULL REFERENCES campaign(id)  
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON voter_tracking TO voting_user;
+CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON voter_tracking
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
 INSERT INTO campaign (name, nomination_deadline, election_date) VALUES ('2018 Election',now() + '1 month'::INTERVAL,now() + '2 months'::INTERVAL);
