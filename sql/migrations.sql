@@ -96,3 +96,12 @@ INSERT INTO offices (name,campaign) VALUES ('Vice President',(SELECT id FROM cam
 INSERT INTO offices (name,campaign) VALUES ('Secretary',(SELECT id FROM campaign));
 INSERT INTO offices (name,campaign) VALUES ('Treasurer',(SELECT id FROM campaign));
 INSERT INTO offices (name,campaign) VALUES ('Event Coordinator',(SELECT id FROM campaign));
+
+-- 1 down
+drop table voter_tracking;
+drop table nominations;
+drop table offices;
+drop table votes;
+drop table candidate;
+drop table authorized_voters;
+drop table campaign;
