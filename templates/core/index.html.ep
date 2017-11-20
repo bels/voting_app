@@ -1,3 +1,10 @@
 % layout 'default';
 % title 'Velocity Online Voting App';
 
+	% if(stash('phase') eq 'nomination'){
+		Currently we are nominating for <%= $campaign->{'name'} %>
+		<a href="<%= url_for('nominate_form') %>" class="btn btn-primary">Go Nominate</a>
+	% } else {
+		Currently we are voting for <%= $campaign->{'name'} %>
+		<a href="<%= url_for('voting_form') %>" class="btn btn-primary">Go Nominate</a>
+	% }

@@ -4,19 +4,21 @@ use Mojo::Base 'Mojolicious::Controller';
 sub index{
 	my $self = shift;
 	
-	my $campaign_id = $self->core->get_current_campaign();
+	my $campaign = $self->core->get_current_campaign();
 	$self->stash(
-		phase => $self->core->voting_phase($campaign_id)
+		phase => $self->core->voting_phase($campaign->{'id'}),
+		campaign => $campaign
 	);
 }
 
 sub nominate_form{
 	my $self = shift;
 
-	my $campaign_id = $self->core->get_current_campaign();
+	my $campaign = $self->core->get_current_campaign();
+
 	$self->stash(
-		offices => $self->core->get_offices($campaign_id),
-		campaign_id => $campaign_id
+		offices => $self->core->get_offices($campaign->{'id'}),
+		campaign_id => $campaign->{'id'}
 	);
 }
 
@@ -30,10 +32,10 @@ sub nominate{
 sub vote_form{
 	my $self = shift;
 
-	my $campaign_id = $self->core->get_current_campaign();
+	my $campaign = $self->core->get_current_campaign();
 	$self->stash(
-		candidates => $self->core->get_candidates($campaign_id),
-		campaign_id => $campaign_id
+		candidates => $self->core->get_candidates($campaign->{'id'}),
+		campaign_id => $campaign->{'id'}
 	)
 }
 

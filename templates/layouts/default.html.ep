@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head><title><%= title %></title></head>
-  <body><%= content %></body>
+  <head>
+  	<title><%= title %></title>
+  	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+  	<h2>Southern Maryland Velocity</h2>
+  	<%= content %>
+  </body>
 </html>
