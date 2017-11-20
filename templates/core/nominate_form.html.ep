@@ -7,7 +7,7 @@
 			<label for="<%= $office->{'name'} %>" class="col-sm-2 control-label"><%= $office->{'name'} %></label>
 			%= hidden_field $office->{'name'} => $office->{'id'}, class => 'office-id'
 			<div class="col-sm-10">
-				%= text_field $office->{'name'}, id => $office->{'name'}, clas => 'form-control'
+				%= text_field $office->{'name'}, id => $office->{'name'}, class => 'form-control office-data'
 			</div>
 		</div>
 	% }
