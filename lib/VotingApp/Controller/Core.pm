@@ -25,7 +25,14 @@ sub nominate_form{
 sub nominate{
 	my $self = shift;
 	
-	$self->core->record_nominations($self->req->params->to_hash);
+	my $params = $self->req->params->to_hash;
+	my $campaign = $self->core->get_current_campaign();
+	my $data = {
+		nominations => $params->{'nominations'},
+		campaign => $campaign->{'id'},
+		voter => $params->{'voter_email'}
+	};
+	$self->core->record_nominations($data);
 	$self->redirect_to($self->url_for('thanks'));
 }
 
