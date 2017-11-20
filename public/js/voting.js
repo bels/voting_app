@@ -8,7 +8,7 @@ $(function(){
 			var $element = $(element);
 			var id = $element.find('.office-id').val();
 			var name = $element.find('.office-data').val();
-			submitData[id] = name;
+			submitData[index] = {id: id, name: name};
 		});
 		
 		$.ajax({
