@@ -8,9 +8,9 @@ $(function(){
 			var $element = $(element);
 			var id = $element.find('.office-id').val();
 			var name = $element.find('.office-data').val();
-			submitData[index] = {office: id, name: name};
+			submitData['nominations'][index] = {office: id, name: name};
 		});
-		
+		submitData['voter_email'] = $('#voter-email').val();
 		$.ajax({
 			method: $form.attr('method'),
 			url: $form.attr('action'),
