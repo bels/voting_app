@@ -42,7 +42,9 @@ sub record_nominations{
 	
 	my $eligible = $self->pg->db->query('select count(*) from authorized_voters where voter = ? and active = true',$data->{'voter'})->hash;
 	if($eligible->{'count'}){
-		$self->pg->db->query('insert into nominations (name, office, campiagn) values (?,?,?)',$data->{'name'},$self->{'office'});
+		foreach my $nomination (@{$data->{'nominations'}){
+			$self->pg->db->query('insert into nominations (name, office, campiagn) values (?,?,?)',$nomination->{'name'},$nomination->{'office'},$data->{'campaign'});
+		}
 		return 1;
 	} else {
 		#couldn't vote
