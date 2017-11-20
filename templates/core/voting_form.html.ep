@@ -1,0 +1,27 @@
+% layout 'default';
+% title 'Velocity Voting App';
+
+	%= form_for voting => (class => 'form-horizontal', method => 'POST') => begin
+		<div class="form-group">
+			<label for="voter_email" class="col-sm-2 control-label">Your Email</label>
+			<div class="col-sm-10">
+				%= text_field 'voter_email', id => 'voter-email', class => 'form-control'
+			</div>
+		</div>
+		% foreach my $office (@{$candidates}) {
+			<label><%= $office->{'name'} %></label>
+			% foreach my $candidate (@{$office->{'candidates'}){
+				<div class="radio">
+					<label>
+						<input type="radio" class="office-selection" name="<%= $office->{'name'} %>" data-name="<%= $office->{'name'} %>" data-id="<%= $office->{'id'} %>" value="<%= $candidate->{'id'} %>">
+						<%= $candidate->{'name'} %>
+					</label>
+				</div>
+			% end
+		% }
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">Vote</button>
+			</div>
+		</div>
+	% end
