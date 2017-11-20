@@ -1,5 +1,19 @@
 %layout 'default';
 %title 'Velocity Online Voting App';
 
-	%= text_field 'name'
-	%= select_field office => $offices
+	%= form_for nominating => (class => 'form-horizontal', method => 'POST', id => 'nominate_form') => begin
+	% foreach my $office (@{$offices}){
+		<div class="form-group">
+			<label for="<%= $office->{'name'} %>" class="col-sm-2 control-label"><%= $office->{'name'}</label>
+			<div class="col-sm-10">
+				%= text_field $office->{'name'}, id => $office->{'name'}, clas => 'form-control'
+			</div>
+		</div>
+	% }
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">Nominate</button>
+			</div>
+		</div>
+	% end
+	
