@@ -64,7 +64,7 @@ sub record_votes{
 		unless($already_voted->{'count'}){
 			foreach my $vote (@{$data->{'votes'}}){
 				$self->pg->db->query('insert into votes(candidate, campaign, office) values (?,?)',$vote->{'candidate'},$data->{'campaign'},$vote->{'office'}) ;
-				$self->pg->db->query('insert into voter_tracking(voter,campaign) values(?,?)',$vote->{'voter'},$data->{'campaign'});
+				$self->pg->db->query('insert into voter_tracking(voter,campaign) values(?,?)',$data->{'voter'},$data->{'campaign'});
 			}
 		} else {
 			return {code => -2, message => 'Already voted'};
