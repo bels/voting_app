@@ -62,8 +62,10 @@ sub record_votes{
 		#second check to see if they have already voted
 		my $already_voted = $self->pg->db->query('select count(*) from voter_tracking where voter = ? and campaign = ?', $data->{'voter'}, $data->{'campaign'})->hash;
 		unless($already_voted->{'count'}){
-			$self->pg->db->query('insert into votes(candidate, campaign) values (?,?)',$data->{'candidate'},$data->{'campaign'}) ;
-			$self->pg->db->query('insert into voter_tracking(voter,campaign) values(?,?)',$data->{'voter'},$data->{'campaign'});
+			foreach my $vote (@{$data->{'votes'}}){
+				$self->pg->db->query('insert into votes(candidate, campaign, office) values (?,?)',$vote->{'candidate'},$data->{'campaign'},$vote->{'office'}) ;
+				$self->pg->db->query('insert into voter_tracking(voter,campaign) values(?,?)',$vote->{'voter'},$data->{'campaign'});
+			}
 		} else {
 			return {code => -2, message => 'Already voted'};
 		}
