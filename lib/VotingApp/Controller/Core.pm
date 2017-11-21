@@ -49,7 +49,14 @@ sub vote_form{
 sub vote{
 	my $self = shift;
 	
-	$self->core->recored_votes($self->req->params->to_hash);
+	my $params = $self->req->params->to_hash;
+	my $campaign = $self->core->get_current_campaign();
+	my $data = {
+		votes => $$params->{'votes'},
+		campaign => $campaign->{'id'},
+		voter => $params->{'voter'}
+	}
+	$self->core->recored_votes($data);
 	$self->redirect_to($self->url_for('thanks'));
 }
 
