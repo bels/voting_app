@@ -20,4 +20,20 @@ $(function(){
 		});
 	});
 
+	$('#vote-form').submit(function(e){
+		e.preventDefault();
+		var $form = $(this);
+		var submitData['voter'] = $('#voter-email').val();
+		$('.office-selection').each(function(index,element){
+			var $element = $(element);
+			submitData['votes'][index] = {office: $element.data('id'), candidate: $element.data('name')};
+		});
+		$.ajax({
+			method: $form.attr('method'),
+			url: $form.attr('action'),
+			data: submitData
+		}).done(function(){
+			
+		});
+	});
 });
