@@ -52,18 +52,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON candidate TO voting_user;
 CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON candidate
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
-CREATE TABLE votes(
-	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-	genesis TIMESTAMPTZ DEFAULT now(),
-	modified TIMESTAMPTZ DEFAULT now(),
-	candidate UUID NOT NULL REFERENCES candidate(id),
-	campaign UUID NOT NULL REFERENCES campaign(id)
-);
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON votes TO voting_user;
-CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON votes
-	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
-
 CREATE TABLE offices(
 	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	genesis TIMESTAMPTZ DEFAULT now(),
@@ -75,6 +63,19 @@ CREATE TABLE offices(
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON offices TO voting_user;
 CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON offices
+	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
+
+CREATE TABLE votes(
+	id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	genesis TIMESTAMPTZ DEFAULT now(),
+	modified TIMESTAMPTZ DEFAULT now(),
+	candidate UUID NOT NULL REFERENCES candidate(id),
+	office UUID NOT NULL REFERENCES offices(id),
+	campaign UUID NOT NULL REFERENCES campaign(id)
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON votes TO voting_user;
+CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON votes
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
 CREATE TABLE nominations(
