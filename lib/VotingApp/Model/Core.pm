@@ -70,7 +70,7 @@ sub record_votes{
 		#second check to see if they have already voted
 		my $already_voted = $self->pg->db->query('select count(*) from voter_tracking where voter = (select id from authorized_voters where voter = ?) and campaign = ?', $data->{'voter'}, $data->{'campaign'})->hash;
 		unless($already_voted->{'count'}){
-			foreach my $office (keys $data->{'votes'}){
+			foreach my $office (keys %{$data->{'votes'}}){
 				$self->pg->db->query('insert into votes(candidate, campaign, office) values (?,?,(select id from offices where name = ?))',$data->{'votes'}->{$office},$data->{'campaign'},$office) ;
 				$self->pg->db->query('insert into voter_tracking(voter,campaign) values((select id from authorized_voters where voter = ?),?)',$data->{'voter'},$data->{'campaign'});
 			}
