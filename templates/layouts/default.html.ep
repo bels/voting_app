@@ -3,9 +3,15 @@
   <head>
   	<title><%= title %></title>
   	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  	<script type="text/javascript" src="/js/jquery.js"></script>
+  	<script type="text/javascript" src="/js/voting.js"></script>
   </head>
   <body>
-  	<h2>Southern Maryland Velocity</h2>
-  	<%= content %>
+  	<div class="container">
+  		<div class="page-header">
+  			<h1>Southern Maryland Velocity <small>Board Elections App</small></h1>
+  		</div>
+  		<%= content %>
+  	</div>
   </body>
 </html>

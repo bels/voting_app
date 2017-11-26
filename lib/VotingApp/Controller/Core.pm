@@ -27,13 +27,15 @@ sub nominate{
 	
 	my $params = $self->req->params->to_hash;
 	my $campaign = $self->core->get_current_campaign();
+
 	my $data = {
-		nominations => $params->{'nominations'},
+		offices => $params->{'office'},
+		office_ids => $params->{'office_id'},
 		campaign => $campaign->{'id'},
 		voter => $params->{'voter_email'}
 	};
 	$self->core->record_nominations($data);
-	$self->redirect_to($self->url_for('thanks'));
+	$self->render(json => {success => Mojo::JSON->true, message => 'Successfully nominated'});
 }
 
 sub vote_form{
@@ -50,22 +52,43 @@ sub vote{
 	my $self = shift;
 	
 	my $params = $self->req->params->to_hash;
+	warn $self->dumper($params);
 	my $campaign = $self->core->get_current_campaign();
+	my $voter = $params->{'voter_email'};
+	delete $params->{'voter_email'}; #disassociating this with the votes
 	my $data = {
-		votes => $$params->{'votes'},
+		votes => $params,
 		campaign => $campaign->{'id'},
-		voter => $params->{'voter'}
-	}
-	$self->core->recored_votes($data);
-	$self->redirect_to($self->url_for('thanks'));
+		voter => $voter
+	};
+	$self->core->record_votes($data);
+	$self->render(json => {success => Mojo::JSON->true, message => 'Successfully voted'});
 }
 
 sub campaign_list{
 	my $self = shift;
+	
+	$self->stash(
+		campaigns => $self->core->get_campaign_list
+	);
 }
 
 sub campaign{
 	my $self = shift;
+	
+	my $votes_raw = $self->core->get_voting_results($self->param('campaign_id'));
+	
+	my $votes = {};
+	foreach my $vote (@{$votes_raw}){
+		if(ref $votes->{$vote->{'office'}} ne 'ARRAY'){
+			$votes->{$vote->{'office'}} = [];
+		}
+		push(@{$votes->{$vote->{'office'}}},{name => $vote->{'name'}, votes => $vote->{'votes'} });
+	}
+warn $self->dumper($votes);
+	$self->stash(
+		votes => $votes
+	);
 }
 
 sub thanks{

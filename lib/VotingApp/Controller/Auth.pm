@@ -7,12 +7,13 @@ sub login_form{
 
 sub login{
 	my $self = shift;
-	
+warn $self->param('password');
+warn $self->config('password');
 	if($self->param('password') eq $self->config('password')){
 		$self->session(logged_in => 1);
-		$self->redirect_to(self->url_for($self->config('login_landing_page')));
+		$self->redirect_to($self->url_for($self->config('login_landing_page')));
 	} else {
-		$self->flash(error => 'Wrong password');
+		$self->flash(error => 'Wrong password. Try again');
 		$self->redirect_to($self->url_for('login'));
 	}
 }

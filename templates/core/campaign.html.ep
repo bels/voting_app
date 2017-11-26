@@ -1,0 +1,13 @@
+% layout 'default';
+% title 'Voting Results';
+
+	<h2>Vote Results</h2>
+	
+	% foreach my $office (keys $votes){
+		<p><%= $office %></p>
+		<ul>
+			% foreach my $candidate (@{$votes->{$office}}){
+				<li><%= $candidate->{'name'} %> - Votes: <%= $candidate->{'votes'} %></li>
+			% }
+		</ul>
+	%}

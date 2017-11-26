@@ -34,9 +34,9 @@ sub startup {
   $r->get('/login')->to('auth#login_form')->name('login_form');
   $r->post('/login')->to('auth#login')->name('login');
   my $authed = $r->under()->to('auth#check_session');
-  $r->get('/campaigns')->to('core#campaign_list')->name('campaigns');
-  $r->get('/results/:campaign_id')->to('core#campaign')->name('campaign');
-  $r->get('/thanks')->to('core#thanks')->name('thanks');
+  $authed->get('/campaigns')->to('core#campaign_list')->name('campaigns');
+  $authed->get('/results/:campaign_id')->to('core#campaign')->name('campaign');
+  $authed->get('/thanks')->to('core#thanks')->name('thanks');
 }
 
 1;

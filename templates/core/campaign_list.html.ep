@@ -1,0 +1,8 @@
+% layout 'default';
+% title 'Current Campaigns';
+
+	<h2>Current Campaigns</h2>
+
+	% foreach my $campaign (@{$campaigns}){
+		<a href="<%= url_for('campaign') %><%= $campaign->{'id'} %>"><%= $campaign->{'name'} %></a>
+	% }

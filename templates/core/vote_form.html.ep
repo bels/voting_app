@@ -1,0 +1,33 @@
+% layout 'default';
+% title 'Velocity Voting App';
+
+	<div class="well">
+		We are currently voting on board members.  You are limited to one vote per email address.  Email address is required.
+	</div>
+	%= form_for vote => (class => 'form-horizontal', method => 'POST', id => 'vote-form') => begin
+		<div class="form-group">
+			<label for="voter_email" class="col-sm-2 control-label">Your Email</label>
+			<div class="col-sm-10">
+				%= text_field 'voter_email', id => 'voter-email', class => 'form-control'
+			</div>
+		</div>
+		<h3>Offices</h3>
+		% foreach my $office (@{$candidates}) {
+			<div class="form-group col-sm-4">
+				<label><%= $office->{'name'} %></label>
+				% for(my $i = 0; $i < scalar @{$office->{'candidates'}}; $i++){
+					<div class="radio">
+						<label>
+							<input type="radio" class="office-selection" name="<%= $office->{'name'} %>" data-name="<%= $office->{'name'} %>" data-id="<%= $office->{'id'} %>" value="<%= $office->{'candidate_ids'}->[$i] %>">
+							<%= $office->{'candidates'}->[$i] %>
+						</label>
+					</div>
+				% }
+			</div>
+		% }
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-2">
+				<button type="submit" class="btn btn-primary">Vote</button>
+			</div>
+		</div>
+	% end
