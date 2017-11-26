@@ -1,20 +1,29 @@
 $(function(){
 
+	var $valid_form = $('.form-horizontal').validate({
+		rules: {
+			voter_email: {
+				required: true,
+				email: true
+			}
+		}
+	});
 	$('#nominate-form').submit(function(e){
 		e.preventDefault();
-		console.log('i did something')
-		var $form = $(this);
-		var submitData = $form.serialize();
-		submitData['voter_email'] = $('#voter-email').val();
-		$.ajax({
-			method: $form.attr('method'),
-			url: $form.attr('action'),
-			data: submitData
-		}).done(function(data){
-			if(data.success){
-				window.location.href = '/thanks';
-			}
-		});
+		if($valid_form.valid()){
+			var $form = $(this);
+			var submitData = $form.serialize();
+			submitData['voter_email'] = $('#voter-email').val();
+			$.ajax({
+				method: $form.attr('method'),
+				url: $form.attr('action'),
+				data: submitData
+			}).done(function(data){
+				if(data.success){
+					window.location.href = '/thanks';
+				}
+			});
+		}
 	});
 
 	$('#vote-form').submit(function(e){

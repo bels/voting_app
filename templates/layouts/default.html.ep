@@ -4,7 +4,11 @@
   	<title><%= title %></title>
   	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   	<script type="text/javascript" src="/js/jquery.js"></script>
+  	<script type="text/javascript" src="/js/jquery.validate.min.js"></script>
   	<script type="text/javascript" src="/js/voting.js"></script>
+  	<style>
+  		.error{ color: red}
+  	</style>
   </head>
   <body>
   	<div class="container">
