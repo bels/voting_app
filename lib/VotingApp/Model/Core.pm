@@ -62,8 +62,7 @@ sub record_nominations{
 
 sub record_votes{
 	my ($self,$data) = @_;
-	use Data::Dumper;
-	warn Dumper $data;
+
 	#first check to see if this person is eligible to vote
 	my $eligible = $self->pg->db->query('select count(*) from authorized_voters where voter = ? and active = true',$data->{'voter'})->hash;
 	if($eligible->{'count'}){

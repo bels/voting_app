@@ -104,7 +104,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON voter_tracking TO voting_user;
 CREATE TRIGGER integrity_enforcement BEFORE UPDATE ON voter_tracking
 	FOR EACH ROW EXECUTE PROCEDURE public.integrity_enforcement();
 
-INSERT INTO campaign (name, nomination_deadline, election_date) VALUES ('2018 Election',now(),now() + '1 week'::INTERVAL);
+INSERT INTO campaign (name, nomination_deadline, election_date) VALUES ('2018 Election',now() + '1 week'::INTERVAL,now() + '2 weeks'::INTERVAL);
 INSERT INTO offices (name,campaign) VALUES ('President',(SELECT id FROM campaign));
 INSERT INTO offices (name,campaign) VALUES ('Vice President',(SELECT id FROM campaign));
 INSERT INTO offices (name,campaign) VALUES ('Secretary',(SELECT id FROM campaign));

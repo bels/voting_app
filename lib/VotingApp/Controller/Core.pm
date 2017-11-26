@@ -52,7 +52,7 @@ sub vote{
 	my $self = shift;
 	
 	my $params = $self->req->params->to_hash;
-	warn $self->dumper($params);
+
 	my $campaign = $self->core->get_current_campaign();
 	my $voter = $params->{'voter_email'};
 	delete $params->{'voter_email'}; #disassociating this with the votes
@@ -85,7 +85,7 @@ sub campaign{
 		}
 		push(@{$votes->{$vote->{'office'}}},{name => $vote->{'name'}, votes => $vote->{'votes'} });
 	}
-warn $self->dumper($votes);
+
 	$self->stash(
 		votes => $votes
 	);
