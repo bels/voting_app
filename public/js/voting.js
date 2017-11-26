@@ -27,7 +27,7 @@ $(function(){
 			data: submitData
 		}).done(function(data){
 			if(data.success){
-				//window.location.href = '/thanks';
+				window.location.href = '/thanks';
 			}
 		});
 	});

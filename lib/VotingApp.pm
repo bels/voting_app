@@ -33,10 +33,11 @@ sub startup {
   $r->post('/vote')->to('core#vote')->name('vote');
   $r->get('/login')->to('auth#login_form')->name('login_form');
   $r->post('/login')->to('auth#login')->name('login');
+  $r->get('/thanks')->to('core#thanks')->name('thanks');
   my $authed = $r->under()->to('auth#check_session');
   $authed->get('/campaigns')->to('core#campaign_list')->name('campaigns');
   $authed->get('/results/:campaign_id')->to('core#campaign')->name('campaign');
-  $authed->get('/thanks')->to('core#thanks')->name('thanks');
+  
 }
 
 1;
